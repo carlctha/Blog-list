@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Eric Henziger",
+    "author": "Eric Henziger",
+    "url": "henziger.se",
+    "likes": 0
+}
