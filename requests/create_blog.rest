@@ -2,8 +2,8 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "Eric Henziger",
-    "author": "Eric Henziger",
-    "url": "henziger.se",
-    "likes": 0
+    "title": "Pythonic Ways to Write Clean Code",
+    "author": "Alex Programmer",
+    "url": "https://example.com/pythonic-clean-code",
+    "likes": 28
 }
