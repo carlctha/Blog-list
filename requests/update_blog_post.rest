@@ -1,0 +1,9 @@
+PUT http://localhost:3003/api/blogs/657ddbbb2d646d10ddc16384
+Content-Type: application/json
+
+{
+  "title": "Ben",
+  "author": "Däjs",
+  "url": "Ben.manamadäjs.js",
+  "likes": 100
+}
