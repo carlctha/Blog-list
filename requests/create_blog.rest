@@ -5,5 +5,5 @@ Content-Type: application/json
     "title": "Pythonic Ways to Write Clean Code",
     "author": "Alex Programmer",
     "url": "https://example.com/pythonic-clean-code",
-    "likes": 28
+    "likes": 25
 }
