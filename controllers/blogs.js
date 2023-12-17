@@ -7,28 +7,28 @@ blogsRouter.get("/", (req, res) => {
     });
 });
 
-blogsRouter.get("/:id", (req, res) => {
+blogsRouter.get("/:id", (req, res, next) => {
     Blog.findById(req.params.id).then((blog) => {
         if (blog) {
             res.json(blog);
         } else {
             res.status(404).end();
         };
-    });
+    }).catch(error => next(error));
 });
 
-blogsRouter.post("/", (req, res) => {
+blogsRouter.post("/", (req, res, next) => {
     const blog = new Blog(req.body);
 
     blog.save().then(result => {
         res.status(201).json(result);
-    });
+    }).catch(error => next(error));
 });
 
 blogsRouter.delete("/:id", (req, res) => {
     Blog.findByIdAndDelete(req.params.id).then(() => {
         res.status(204).end();
-    });
+    }).catch(error => next(error));
 });
 
 blogsRouter.put("/:id", (req, res) => {
@@ -43,7 +43,7 @@ blogsRouter.put("/:id", (req, res) => {
 
     Blog.findByIdAndUpdate(req.params.id, blog, { new: true }).then(blog => {
         res.json(blog);
-    });
+    }).catch(error => next(error));
 });
 
 module.exports = blogsRouter;
