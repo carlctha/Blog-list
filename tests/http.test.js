@@ -68,14 +68,31 @@ describe("Post tests", () => {
             likes: 100
         };
 
-        const res = api.post("/api/blogs")
+        const res = await api.post("/api/blogs")
+            .send(testBlog)
+            .expect(201);
+        
+        console.log(res)
+
+        expect(res.body.title).toBe(testBlog.title);
+        expect(res.body.author).toBe(testBlog.author);
+        expect(res.body.url).toBe(testBlog.url);
+        expect(res.body.likes).toBe(testBlog.likes);
+    });
+
+    test("Default likes to 0", async () => {
+        const testBlog = {
+            title: "Test blog",
+            author: "Ben",
+            url: "https://example.com/pythonic-clean-code",
+            likes: ""
+        };
+
+        const res = await api.post("/api/blogs")
             .send(testBlog)
             .expect(201);
 
-        expect(res._data.title).toBe(testBlog.title);
-        expect(res._data.author).toBe(testBlog.author);
-        expect(res._data.url).toBe(testBlog.url);
-        expect(res._data.likes).toBe(testBlog.likes);
+        expect(res.body.likes).toBe(0);
     });
 });
 
