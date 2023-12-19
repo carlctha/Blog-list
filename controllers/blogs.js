@@ -20,6 +20,10 @@ blogsRouter.get("/:id", (req, res, next) => {
 blogsRouter.post("/", (req, res, next) => {
     const blog = new Blog(req.body);
 
+    if (!blog.likes) {
+        blog.likes = 0;
+    };
+
     blog.save().then(result => {
         res.status(201).json(result);
     }).catch(error => next(error));
