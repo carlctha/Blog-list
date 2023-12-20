@@ -136,10 +136,38 @@ describe("Post tests", () => {
 describe("Delete tests", () => {
     test("delete request", async () => {
         const res = await api.get("/api/blogs");
-        const id = res._body[2].id;
+        const id = res.body[2].id;
 
         await api.delete(`/api/blogs/${id}`)
             .expect(204);
+
+        const newRes = await api.get("/api/blogs");
+        const deleted = newRes.body.find(
+            blog => blog.id === id
+        );
+        expect(deleted).toBeUndefined();
+    });
+});
+
+describe("Put tests", () => {
+    test("find and update", async () => {
+        const getRes = await api.get("/api/blogs");
+        const id = getRes.body[0].id;
+        const updateBlog = {
+            title: "Däjs",
+            author: "Benjamin Ingrosso",
+            url: "https://sv.wikipedia.org/wiki/Bananer_i_pyjamas",
+            likes: 23,
+        };
+
+        const postRes = await api.put(`/api/blogs/${id}`)
+            .send(updateBlog)
+            .expect(201);
+        
+        expect(postRes.body.title).toBe(updateBlog.title);
+        expect(postRes.body.author).toBe(updateBlog.author);
+        expect(postRes.body.url).toBe(updateBlog.url);
+        expect(postRes.body.likes).toBe(updateBlog.likes);
     });
 });
 

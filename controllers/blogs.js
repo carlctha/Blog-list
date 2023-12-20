@@ -46,7 +46,7 @@ blogsRouter.put("/:id", (req, res) => {
     };
 
     Blog.findByIdAndUpdate(req.params.id, blog, { new: true }).then(blog => {
-        res.json(blog);
+        res.status(201).json(blog);
     }).catch(error => next(error));
 });
 
