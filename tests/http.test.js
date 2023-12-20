@@ -72,8 +72,6 @@ describe("Post tests", () => {
             .send(testBlog)
             .expect(201);
         
-        console.log(res)
-
         expect(res.body.title).toBe(testBlog.title);
         expect(res.body.author).toBe(testBlog.author);
         expect(res.body.url).toBe(testBlog.url);
@@ -93,6 +91,55 @@ describe("Post tests", () => {
             .expect(201);
 
         expect(res.body.likes).toBe(0);
+    });
+
+    test("missing title 400 Bad request", async () => {
+        const testBlog = {
+            title: "",
+            author: "Ben",
+            url: "https://example.com/pythonic-clean-code",
+            likes: ""
+        };
+
+        await api.post("/api/blogs")
+            .send(testBlog)
+            .expect(400);
+    });
+
+    test("missing author 400 Bad request", async () => {
+        const testBlog = {
+            title: "Test blog",
+            author: "",
+            url: "https://example.com/pythonic-clean-code",
+            likes: ""
+        };
+
+        await api.post("/api/blogs")
+            .send(testBlog)
+            .expect(400);
+    });
+
+    test("missing url 400 Bad request", async () => {
+        const testBlog = {
+            title: "Test blog",
+            author: "Ben",
+            url: "",
+            likes: ""
+        };
+
+        await api.post("/api/blogs")
+            .send(testBlog)
+            .expect(400);
+    });
+});
+
+describe("Delete tests", () => {
+    test("delete request", async () => {
+        const res = await api.get("/api/blogs");
+        const id = res._body[2].id;
+
+        await api.delete(`/api/blogs/${id}`)
+            .expect(204);
     });
 });
 
