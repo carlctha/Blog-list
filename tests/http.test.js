@@ -208,6 +208,53 @@ describe("users tests", () => {
         expect(usernames).toContain(newUser.username);
     });
 
+    test("short username", async () => {
+        const newUser = {
+            username: "Dä",
+            name: "Barack Obama",
+            password: "Manamadäjs"
+        };
+
+        const res = await api.post("/api/users")
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/);
+
+        expect(res.body.error).toContain("Username must be at least 3 characthers");
+    });
+
+    test("short password", async () => {
+        const newUser = {
+            username: "Däjs",
+            name: "Barack Obama",
+            password: "B"
+        };
+
+        const res = await api.post("/api/users")
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/);
+
+        expect(res.body.error).toContain("Password must be at least 3 characthers");
+    });
+
+    test("already in db", async () => {
+        const startingUsers = await usersInDb();
+
+        const newUser = {
+            username: "Ben",
+            name: "manama däjs",
+            password: "12312312"
+        };
+
+        await api.post("/api/users")
+            .send(newUser)
+            .expect(401);
+
+        const endUsers = await usersInDb();
+        expect(endUsers).toBe(startingUsers);
+    });
+
 });
 
 afterAll(async () => {
