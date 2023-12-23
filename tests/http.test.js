@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../app");
 const Blog = require("../models/blog");
+const bcrypt = require("bcrypt");
+const User = require("../models/user");
+const usersInDb = require("./helper");
 
 const initialBlogs = [
     {
@@ -169,6 +172,42 @@ describe("Put tests", () => {
         expect(postRes.body.url).toBe(updateBlog.url);
         expect(postRes.body.likes).toBe(updateBlog.likes);
     });
+});
+
+describe("users tests", () => {
+    beforeEach(async () => {
+        await User.deleteMany({});
+
+        const passwordHash = await bcrypt.hash("secret", 10);
+        const user = new User({
+            username: "Ben",
+            passwordHash
+        });
+
+        await user.save()
+    });
+
+    test("create user", async () => {
+        const startingUsers = await usersInDb();
+
+        const newUser = {
+            username: "Däjs",
+            name: "Barack Obama",
+            password: "Manamadäjs"
+        };
+
+        await api.post("/api/users")
+            .send(newUser)
+            .expect(201)
+            .expect('Content-Type', /application\/json/);
+
+        const endUsers = await usersInDb();
+        expect(endUsers).toHaveLength(startingUsers.length + 1);
+
+        const usernames = endUsers.map(u => u.username);
+        expect(usernames).toContain(newUser.username);
+    });
+
 });
 
 afterAll(async () => {
