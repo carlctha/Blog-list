@@ -8,11 +8,16 @@ const config = require("./utils/config");
 const logger = require("./utils/logger");
 const middleware = require("./utils/middleware");
 
-mongoose.connect(config.mongoUrl).then(() => {
-    logger.info("connected to database");
-}).catch((error) => {
-    logger.error("Could not connect to databse", error.message);
-});
+const connectToDatabase = async () => {
+    try {
+      await mongoose.connect(config.mongoUrl);
+      logger.info("Connected to the database");
+    } catch (error) {
+      logger.error("Could not connect to the database", error.message);
+    };
+  };
+
+connectToDatabase()
 
 app.use(cors());
 app.use(express.json());
