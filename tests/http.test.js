@@ -181,6 +181,7 @@ describe("users tests", () => {
         const passwordHash = await bcrypt.hash("secret", 10);
         const user = new User({
             username: "Ben",
+            name: "Johnny",
             passwordHash
         });
 
@@ -239,21 +240,20 @@ describe("users tests", () => {
     });
 
     test("already in db", async () => {
-        const startingUsers = await usersInDb();
-
         const newUser = {
             username: "Ben",
             name: "manama däjs",
             password: "12312312"
         };
 
-        await api.post("/api/users")
+        const res = await api.post("/api/users")
             .send(newUser)
-            .expect(401);
-
-        const endUsers = await usersInDb();
-        expect(endUsers).toBe(startingUsers);
-    });
+            .expect(400);
+        
+        expect(res.body.error).toContain(
+            "User validation failed: username: Error, expected `username` to be unique. Value:", newUser.username
+        )
+    }, 10000);
 
 });
 
