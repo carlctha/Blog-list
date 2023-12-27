@@ -21,15 +21,26 @@ blogsRouter.get("/:id", async (req, res, next) => {
 });
 
 blogsRouter.post("/", async (req, res, next) => {
-    const blog = new Blog(req.body);
+    const body = req.body;
+    const user = await User.findById(body.userId);
+
+    const blog = new Blog({
+        title: body.title,
+        author: body.author,
+        url: body.url,
+        likes: body.likes,
+        user: user.id
+    });
 
     if (!blog.likes) {
         blog.likes = 0;
     };
 
     try {
-        const result = await blog.save();
-        res.status(201).json(result);
+        const savedBlog = await blog.save();
+        user.blogs = user.blogs.concat(savedBlog._id);
+        await user.save();
+        res.status(201).json(savedBlog);
     } catch (error) {
         next(error);
     };

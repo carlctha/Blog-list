@@ -5,5 +5,6 @@ Content-Type: application/json
     "title": "Pythonic Ways to Write Clean Code",
     "author": "Alex Programmer",
     "url": "https://example.com/pythonic-clean-code",
-    "likes": ""
+    "likes": "",
+    "userId": "658ca33e9bb8670bef84259e"
 }
